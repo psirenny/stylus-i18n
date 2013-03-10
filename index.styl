@@ -1,98 +1,101 @@
 $i18n-default ?= ltr
-$i18n-ltr ?= .ltr
-$i18n-rtl ?= .rtl
-
+$i18n-ltr ?= '.ltr'
+$i18n-rtl ?= '.rtl'
+  
 i18n-property(prop, dir, args1, args2=args1)
-  oppositeDir = opposite-position(dir)
+  oppositeDir = dir ? opposite-position(dir) : ''
 
   if ($i18n-default == ltr)
-    $i18n-ltr &
-      s(prop, dir) args1
-    $i18n-rtl &
-      s(prop, oppositeDir) args2
+    p(s(prop, dir))
+    p(s(prop, oppositeDir))
+    {$i18n-ltr} &
+      {s(prop, dir)} args1
+    {$i18n-rtl} &
+      {s(prop, oppositeDir)} args2
   else
-    $i18n-ltr &
-      s(prop, oppositeDir) args2
-    $i18n-rtl &
-      s(prop, dir) args1
+    {$i18n-ltr} &
+      {s(prop, oppositeDir)} args1
+    {$i18n-rtl} &
+      {s(prop, dir)} args2
 
-border-bottom-left-radius
-  i18n-property 'border-bottom-%s-radius' 'left' arguments
+border-bottom-left-radius()
+  i18n-property 'border-bottom-%s-radius' left arguments
 
-border-bottom-right-radius
-  i18n-property 'border-bottom-%s-radius' 'right' arguments
+border-bottom-right-radius()
+  i18n-property 'border-bottom-%s-radius' right arguments
 
-border-left
-  i18n-property 'border-%s' 'left' arguments
+border-left()
+  i18n-property 'border-%s' left arguments
 
-border-left-color
-  i18n-property 'border-%s-color' 'left' arguments
+border-left-color()
+  i18n-property 'border-%s-color' left arguments
 
-border-left-style
-  i18n-property 'border-%s-style' 'left' arguments
+border-left-style()
+  i18n-property 'border-%s-style' left arguments
 
-border-left-width
-  i18n-property 'border-%s-width' 'left' arguments
+border-left-width()
+  i18n-property 'border-%s-width' left arguments
 
-border-right
-  i18n-property 'border-%s' 'right' arguments
+border-right()
+  i18n-property 'border-%s' right arguments
 
-border-right-color
-  i18n-property 'border-%s-color' 'right' arguments
+border-right-color()
+  i18n-property 'border-%s-color' right arguments
 
-border-right-style
-  i18n-property 'border-%s-style' 'right' arguments
+border-right-style()
+  i18n-property 'border-%s-style' right arguments
 
-border-right-width
-  i18n-property 'border-%s-width' 'right' arguments
+border-right-width()
+  i18n-property 'border-%s-width' right arguments
 
-border-top-left-radius
-  i18n-property 'border-top-%s-radius' 'left' arguments
+border-top-left-radius()
+  i18n-property 'border-top-%s-radius' left arguments
 
-border-top-right-radius
-  i18n-property 'border-top-%s-radius' 'right' arguments
+border-top-right-radius()
+  i18n-property 'border-top-%s-radius' right arguments
 
 float(val)
-  if (val == 'left' || val == 'right')
+  if (val == left || val == right)
     i18n-property 'float' '' val opposite-position(val)
   else
     float val
 
-left
-  i18n-property '%s' 'left' arguments
+/* cannot overload left() for some reason
+left()
+  i18n-property '%s' left arguments
+*/
 
-margin
+margin()
   if (length(arguments) == 4)
     i18n-property 'margin' '' (arguments[0] arguments[3] arguments[2] arguments [1]) (arguments[0] arguments[1] arguments[2] arguments [3])
   else
     margin arguments
 
-margin-left
-  i18n-property 'margin-%s' 'left' arguments
+margin-left()
+  i18n-property 'margin-%s' left arguments
 
-margin-right
-  i18n-property 'margin-%s' 'right' arguments
+margin-right()
+  i18n-property 'margin-%s' right arguments
 
-padding
+padding()
   if (length(arguments) == 4)
     i18n-property 'margin' '' (arguments[0] arguments[3] arguments[2] arguments [1]) (arguments[0] arguments[1] arguments[2] arguments [3])
   else
     padding arguments
 
-padding-left
-  i18n-property 'padding-%s' 'left' arguments
+padding-left()
+  i18n-property 'padding-%s' left arguments
 
-padding-right
-  i18n-property 'padding-%s' 'right' arguments
+padding-right()
+  i18n-property 'padding-%s' right arguments
 
-right
-  i18n-property '%s' 'right' arguments
+/* cannot overload right() for some reason
+right()
+  i18n-property '%s' right arguments
+*/
 
 text-align(val)
-  if (val == 'left' || val == 'right')
+  if (val == left || val == right)
     i18n-property 'text-align' '' val opposite-position(val)
   else
     text-align val
-
-text-indent(val)
-  i18n-property 'text-indent' '' val -val
