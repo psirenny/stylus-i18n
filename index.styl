@@ -1,21 +1,23 @@
 $i18n-default ?= ltr
 $i18n-ltr ?= '.ltr'
 $i18n-rtl ?= '.rtl'
-  
+
 i18n-property(prop, dir, args1, args2=args1)
   oppositeDir = dir ? opposite-position(dir) : ''
 
   if ($i18n-default == ltr)
-    p(s(prop, dir))
-    p(s(prop, oppositeDir))
-    {$i18n-ltr} &
+    {$i18n-ltr} &,
+    {$i18n-ltr}&
       {s(prop, dir)} args1
-    {$i18n-rtl} &
+    {$i18n-rtl} &,
+    {$i18n-rtl}&
       {s(prop, oppositeDir)} args2
   else
-    {$i18n-ltr} &
+    {$i18n-ltr} &,
+    {$i18n-ltr}&
       {s(prop, oppositeDir)} args1
-    {$i18n-rtl} &
+    {$i18n-rtl} &,
+    {$i18n-rtl}&
       {s(prop, dir)} args2
 
 border-bottom-left-radius()
