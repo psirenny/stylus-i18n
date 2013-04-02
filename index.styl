@@ -1,24 +1,26 @@
 $i18n-default ?= ltr
 $i18n-ltr ?= '.ltr'
 $i18n-rtl ?= '.rtl'
+$i18n-set ?= false
 
-i18n-property(prop, dir, args1, args2=args1)
+{$i18n-ltr}
+  direction ltr
+
+{$i18n-rtl}
+  direction rtl
+
+i18n-property(prop, dir, args1, args2 = args1)
   oppositeDir = dir ? opposite-position(dir) : ''
 
-  if ($i18n-default == ltr)
-    {$i18n-ltr} &,
-    {$i18n-ltr}&
-      {s(prop, dir)} args1
-    {$i18n-rtl} &,
-    {$i18n-rtl}&
-      {s(prop, oppositeDir)} args2
-  else
-    {$i18n-ltr} &,
-    {$i18n-ltr}&
-      {s(prop, oppositeDir)} args1
-    {$i18n-rtl} &,
-    {$i18n-rtl}&
-      {s(prop, dir)} args2
+  {$i18n-ltr} &,
+  {$i18n-ltr}&
+    {s(prop, dir)} args1
+  {$i18n-rtl} &,
+  {$i18n-rtl}&
+    if (args1 == args2)
+      add-property(s(prop, oppositeDir), args2, false)
+    else
+      add-property(s(prop, oppositeDir), args2)
 
 border-bottom-left-radius()
   i18n-property 'border-bottom-%s-radius' left arguments
@@ -56,14 +58,21 @@ border-top-left-radius()
 border-top-right-radius()
   i18n-property 'border-top-%s-radius' right arguments
 
-float(val)
-  if (val == left || val == right)
-    i18n-property 'float' '' val opposite-position(val)
+float(dir, transform = true)
+  if (transform) && (dir == left || dir == right)
+    {$i18n-ltr} &,
+    {$i18n-ltr}&
+      float dir
+    {$i18n-rtl} &,
+    {$i18n-rtl}&
+      float opposite-position(dir)
   else
-    float val
+    float dir
 
-//left()
-//  i18n-property '%s' left arguments
+/* cannot overload left() for some reason
+left()
+  i18n-property '%s' left arguments
+*/
 
 margin()
   if (length(arguments) == 4)
@@ -71,11 +80,27 @@ margin()
   else
     margin arguments
 
-margin-left()
-  i18n-property 'margin-%s' left arguments
+margin-left(n, transform = true)
+  if transform
+    {$i18n-ltr} &,
+    {$i18n-ltr}&
+      margin-left n
+    {$i18n-rtl} &,
+    {$i18n-rtl}&
+      margin-right n false
+  else
+    margin-left n
 
-margin-right()
-  i18n-property 'margin-%s' right arguments
+margin-right(n, transform = true)
+  if transform
+    {$i18n-ltr} &,
+    {$i18n-ltr}&
+      margin-right n
+    {$i18n-rtl} &,
+    {$i18n-rtl}&
+      margin-left n false
+  else
+    margin-right n
 
 padding()
   if (length(arguments) == 4)
@@ -83,17 +108,40 @@ padding()
   else
     padding arguments
 
-padding-left()
-  i18n-property 'padding-%s' left arguments
-
-padding-right()
-  i18n-property 'padding-%s' right arguments
-
-//right()
-//  i18n-property '%s' right arguments
-
-text-align(val)
-  if (val == left || val == right)
-    i18n-property 'text-align' '' val opposite-position(val)
+padding-left(n, transform = true)
+  if transform
+    {$i18n-ltr} &,
+    {$i18n-ltr}&
+      padding-left n
+    {$i18n-rtl} &,
+    {$i18n-rtl}&
+      padding-left n false
   else
-    text-align val
+    padding-left n
+
+padding-right(n, transform = true)
+  if transform
+    {$i18n-ltr} &,
+    {$i18n-ltr}&
+      padding-right n
+    {$i18n-rtl} &,
+    {$i18n-rtl}&
+      padding-left n false
+  else
+    padding-right n
+
+/* cannot overload right() for some reason
+right()
+  i18n-property '%s' right arguments
+*/
+
+text-align(dir, transform = true)
+  if (transform) && (dir == left || dir == right)
+    {$i18n-ltr} &,
+    {$i18n-ltr}&
+      text-align dir
+    {$i18n-rtl} &,
+    {$i18n-rtl}&
+      text-align opposite-position(dir)
+  else
+    text-align dir
